@@ -6,11 +6,13 @@ const FloatingShape = () => {
   const meshRef = useRef()
 
   useFrame((state) => {
-    const { clock, mouse } = state
+    const { mouse } = state
+    const t = performance.now() * 0.001
+
     if (meshRef.current) {
       // Gentle rotation
-      meshRef.current.rotation.x = clock.getElapsedTime() * 0.2
-      meshRef.current.rotation.y = clock.getElapsedTime() * 0.3
+      meshRef.current.rotation.x = t * 0.2
+      meshRef.current.rotation.y = t * 0.3
 
       // Subtle follow mouse
       meshRef.current.position.x = (mouse.x * 0.5)
@@ -41,7 +43,7 @@ const Modern3DScene = () => {
       <Canvas camera={{ position: [0, 0, 5], fov: 75 }}>
         <ambientLight intensity={0.5} />
         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} />
-        <pointLight position={[-10, -10, -10]} color="#8b5cf6" intensity={1} />
+        <pointLight position={[-10, -10, -10]} color="#0ea5e9" intensity={1} />
         <FloatingShape />
       </Canvas>
     </div>

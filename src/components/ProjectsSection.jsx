@@ -1,35 +1,36 @@
 import React, { useState, useRef } from 'react'
-import { ArrowRight, ExternalLink, Github } from 'lucide-react'
+import { ArrowRight, ExternalLink, Github, ChevronDown, ChevronUp } from 'lucide-react'
+import { cn } from '../lib/util'
 
 const projects = [
     {
+        id: 4,
+        title: "CareSync Pro",
+        description: "A comprehensive Healthcare Management System engineered with the MERN stack. Features real-time doctor-patient synchronization via WebSockets, automated clinical workflows, and a robust admin dashboard for resource allocation. Built with a focus on high availability and secure data handling, it streamlines the entire patient journey from appointment booking to digital prescriptions and real-time queue management.",
+        image: '/hospital Queue Managment system.webp',
+        tags: ["MERN Stack", "Tailwind CSS", "WebSockets", "Vercel"],
+        demoUrl: "https://hospital-smart-queue-management-sys.vercel.app/",
+        gitHubUrl: "https://github.com/abubakarcodeer/Smart_Queue_Management_System",
+        className: "md:col-span-2 md:row-span-2"
+    },
+    {
         id: 1,
         title: "CryptoPlace",
-        description: "A comprehensive cryptocurrency tracking platform using React and REST APIs. Features real-time price updates and detailed market analysis.",
+        description: "An enterprise-grade cryptocurrency intelligence platform. Integrates real-time market data via REST APIs with advanced charting and portfolio tracking capabilities.",
         image: '/CryptoThumbnail.webp',
         tags: ["React", "Tailwind", "REST API"],
         demoUrl: "https://cryptoplace01.netlify.app",
         gitHubUrl: "https://github.com/abubakarcodeer/CryptoWeb",
-        className: "md:col-span-2 md:row-span-2"
-    },
-    {
-        id: 2,
-        title: "NFT Gallery",
-        description: "A sleek, immersive gallery for digital assets.",
-        image: '/NFT-Thumbnail.webp',
-        tags: ["React", "Tailwind"],
-        demoUrl: "https://nft-gallery01.netlify.app",
-        gitHubUrl: "https://github.com/abubakarcodeer/NFT-Gallery",
         className: "md:col-span-1 md:row-span-1"
     },
     {
-        id: 3,
-        title: "VidTube",
-        description: "Modern video streaming interface.",
-        image: '/VidTubeThumbnail.webp',
-        tags: ["React", "API"],
-        demoUrl: "https://vidtube01.netlify.app",
-        gitHubUrl: "https://github.com/abubakarcodeer/VidTube",
+        id: 2,
+        title: "Zikr-e-Noor",
+        description: "A premium Islamic lifestyle application featuring high-fidelity Quranic audio, precise Qibla tracking, and an automated prayer notification system. Engineered for high performance and deep spiritual engagement.",
+        image: '/Zikr-e-Noor.webp',
+        tags: ["Android", "Kotlin", "REST API", "Mobile"],
+        demoUrl: "https://play.google.com/store/apps/details?id=com.fivebytesolution.zikrenoor",
+        gitHubUrl: "https://github.com/abubakarcodeer",
         className: "md:col-span-1 md:row-span-1"
     }
 ]
@@ -38,6 +39,7 @@ const SpotlightCard = ({ project }) => {
     const divRef = useRef(null);
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const [opacity, setOpacity] = useState(0);
+    const [isExpanded, setIsExpanded] = useState(false);
 
     const handleMouseMove = (e) => {
         if (!divRef.current) return;
@@ -50,6 +52,8 @@ const SpotlightCard = ({ project }) => {
 
     const handleMouseEnter = () => setOpacity(1);
     const handleMouseLeave = () => setOpacity(0);
+
+    const isFeatured = project.className.includes('row-span-2');
 
     return (
         <div
@@ -68,7 +72,7 @@ const SpotlightCard = ({ project }) => {
             />
 
             <div className='h-full flex flex-col'>
-                <div className={`${project.className.includes('row-span-2') ? 'h-80' : 'h-48'} overflow-hidden relative`}>
+                <div className={`${isFeatured ? 'h-80' : 'h-48'} overflow-hidden relative`}>
                     <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 flex items-center justify-center">
                         <div className="flex space-x-4 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                             <a href={project.demoUrl} target="_blank" rel="noreferrer" className="p-3 bg-white text-black rounded-full hover:scale-110 transition-transform">
@@ -96,12 +100,29 @@ const SpotlightCard = ({ project }) => {
                             ))}
                         </div>
 
-                        <h3 className={`font-bold mb-3 group-hover:text-primary transition-colors ${project.className.includes('row-span-2') ? 'text-3xl' : 'text-xl'}`}>
+                        <h3 className={`font-bold mb-3 group-hover:text-primary transition-colors ${isFeatured ? 'text-3xl' : 'text-xl'}`}>
                             {project.title}
                         </h3>
-                        <p className='text-muted-foreground text-sm leading-relaxed'>
+                        <p className={cn(
+                            'text-muted-foreground text-sm leading-relaxed transition-all duration-300',
+                            isExpanded ? 'line-clamp-none' : (isFeatured ? 'line-clamp-2 md:line-clamp-none' : 'line-clamp-2')
+                        )}>
                             {project.description}
                         </p>
+
+                        <button
+                            onClick={() => setIsExpanded(!isExpanded)}
+                            className={cn(
+                                "inline-flex items-center gap-1 text-primary text-xs font-bold mt-3 hover:opacity-80 transition-opacity cursor-pointer",
+                                isFeatured ? "md:hidden" : ""
+                            )}
+                        >
+                            {isExpanded ? (
+                                <>Show Less <ChevronUp size={14}/></>
+                            ) : (
+                                <>See More <ChevronDown size={14}/></>
+                            )}
+                        </button>
                     </div>
                 </div>
             </div>
@@ -117,11 +138,11 @@ const ProjectsSection = () => {
             <div className='container mx-auto max-w-6xl relative z-10'>
                 <div className="flex flex-col items-center mb-16">
                     <h2 className='text-4xl md:text-5xl font-bold mb-4 text-center tracking-tight'>
-                        Featured <span className='text-primary'>Projects</span>
+                        Featured <span className='text-primary'>Case Studies</span>
                     </h2>
                     <div className="h-1.5 w-20 bg-primary rounded-full mb-6" />
                     <p className='text-center text-muted-foreground max-w-2xl mx-auto text-lg'>
-                        A collection of digital experiences crafted with a focus on <span className="text-foreground">performance</span> and <span className="text-foreground">clean aesthetics</span>.
+                        A showcase of engineering excellence, where <span className="text-foreground">intentional design</span> meets <span className="text-foreground">robust functionality</span>.
                     </p>
                 </div>
 
@@ -138,7 +159,7 @@ const ProjectsSection = () => {
                         target='_blank'
                         rel="noreferrer"
                     >
-                        Explore More on GitHub <ArrowRight size={20}/>
+                        Review Extended Codebase <ArrowRight size={20}/>
                     </a>
                 </div>
             </div>
